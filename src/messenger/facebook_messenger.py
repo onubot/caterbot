@@ -4,7 +4,7 @@ from pprint import pprint
 from src.db import mongodb
 from src.states import State
 import datetime
-from src.messenger.flows import register, index_user
+from src.messenger.flows import register, index_user, login, update_state
 
 PAGE_ID = "619830321739930"
 
@@ -18,12 +18,42 @@ class Messenger(BaseMessenger):
         )
 
     def message(self, message):
-        if message["sender"]["id"] != PAGE_ID:
+        sender_id = message["sender"]["id"]
+
+        if sender_id != PAGE_ID:
             index_user.update(message)
+            user = index_user.get(sender_id)
+
+            if (
+                user["current_state"] == State.LOGIN
+                and user["current_state_completed"] == False
+            ):
+                credentials = message["message"]["text"].split(" ")
+                if len(credentials) != 2:
+                    self.send(
+                        {"text": "দয়া করে আবার সঠিকভাবে ইউজারনেম ও পাসওয়ার্ড দিন"},
+                        "RESPONSE",
+                    )
+
+                username, password = credentials
+
+                if username == user["username"] and password == user["password"]:
+                    update_state.update(
+                        sender_id,
+                        current_state=State.LOGIN,
+                        state_completion=True,
+                        logged_in=True,
+                    )
+                    self.send(
+                        {
+                            "text": "অভিনন্দন, আপনি সিস্টেমে লগিন করতে পেরেছেন, আপনি চাইলে আগামীকালের জন্য এখনি অর্ডার করতে পারেন"
+                        }
+                    )
+
+                else:
+                    self.send({})
+
             print(message)
-            self.send(
-                {"text": "Received: {0}".format(message["message"]["text"])}, "RESPONSE"
-            )
 
     def delivery(self, message):
         pass
@@ -44,6 +74,20 @@ class Messenger(BaseMessenger):
         if message["postback"]["payload"] == State.HI:
             if message["sender"]["id"] != PAGE_ID:
                 index_user.index(message)
+
+        if message["postback"]["payload"] == State.LOGIN:
+            if message["sender"]["id"] != PAGE_ID:
+                update_state.update(
+                    message["sender"]["id"],
+                    current_state=State.LOGIN,
+                    state_completion=False,
+                )
+                self.send(
+                    {
+                        "text": "দয়া করে ইউজারনেম ও পাসওয়ার্ড দিন, উদাহরণ: username password"
+                    },
+                    "RESPONSE",
+                )
 
     def optin(self, message):
         pass
