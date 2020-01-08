@@ -1,0 +1,30 @@
+{
+  "foods": [
+    {
+      "food_id": "CHICKEN_KHICHURI",
+      "title": "চিকেন খিচুড়ী",
+      "image_url": "https://i.ytimg.com/vi/T2Xoh3QIYFU/maxresdefault.jpg",
+      "quantity": 1,
+      "price": 120,
+      "currency": "BDT",
+      "subtitle": "চিকেনের পাশাপাশি সিদ্ধ ডিম ও সালাদ রয়েছে"
+    },
+    {
+      "title": "বিফ বার্গার",
+      "food_id": "BEEF_BURGER",
+      "image_url": "https://img.hellofresh.com/f_auto,fl_lossy,q_auto,w_1200/hellofresh_s3/image/beef-burger-with-caramelised-onion-jam-d6d4260d.jpg",
+      "quantity": 1,
+      "price": 230,
+      "currency": "BDT",
+      "subtitle": "১টি বিফ প্যাটি"
+    },
+    {
+      "title": "ফোর সিজন পিজা",
+      "food_id": "FOUR_SEASON_PIZZA",
+      "image_url": "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2019/8/15/0/WU2302__four-seasons-pizza-skillet_s4x3.jpg.rend.hgtvcom.826.620.suffix/1565875412481.jpeg",
+      "quantity": 1,
+      "currency": "BDT",
+      "subtitle": "১২ ইঞ্চি"
+    }
+  ]
+}
