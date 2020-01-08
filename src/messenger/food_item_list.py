@@ -17,5 +17,5 @@ food_elements = [
             )
         ],
     )
-    for item in food_list["foods"])
+    for item in food_list["foods"]
 ]
