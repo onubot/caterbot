@@ -30,15 +30,9 @@ class Messenger(BaseMessenger):
         )
 
     def message(self, message):
-        print(message)
-
         sender_id = message["sender"]["id"]
-
-        user_data = self.get_user()
-
-        pprint(user_data)
-
         if sender_id != PAGE_ID:
+            print(message)
             index_user.update(message)
             user = index_user.get(sender_id)
 
