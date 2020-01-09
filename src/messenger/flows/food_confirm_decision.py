@@ -8,7 +8,7 @@ def get_confirmation(item):
 
     replies = QuickReplies(quick_replies=[confirm_order, cancel_order])
 
-    text = {"text": f"আইটেম {item['title']} এর দাম পড়বে {item['price']৳}। কনফার্ম করব?"}
+    text = {"text": f"আইটেম {item['title']} এর দাম পড়বে {item['price']}৳। কনফার্ম করব?"}
 
     text["quick_replies"] = replies.to_dict()
 
