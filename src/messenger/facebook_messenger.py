@@ -34,9 +34,6 @@ class Messenger(BaseMessenger):
     def message(self, message):
         sender_id = message["sender"]["id"]
 
-        print(f"INCOMING MESSAGE - isPAGE {sender_id == PAGE_ID}")
-        pprint(message)
-
         if sender_id != PAGE_ID:
             print(message)
             index_user.update(message)
@@ -143,9 +140,6 @@ class Messenger(BaseMessenger):
         print("postback", message)
 
         user = index_user.get(message["sender"]["id"]) or {}
-
-        self.send({"text": f"replied: hello"}, "RESPONSE")
-
         # User not found, better index him at first
         if user == {}:
             index_user.index(message)
