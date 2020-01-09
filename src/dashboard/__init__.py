@@ -1,3 +1,4 @@
+# Dashboard blueprint
 from flask.blueprints import Blueprint
 from config import api_version
 
