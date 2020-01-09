@@ -13,3 +13,9 @@ jobs:
           key: ${{ secrets.KEY }}
           script: |
             git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/onubot/caterbot.git
+            cd caterbot
+            git reset hard --HEAD
+            git pull origin master
+            source /home/ubuntu/caterbot/venv activate
+            pip install -r requirements /home/ubuntu/caterbot/requirements.txt
+            
