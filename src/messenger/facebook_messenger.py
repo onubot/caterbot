@@ -139,6 +139,8 @@ class Messenger(BaseMessenger):
 
         user = index_user.get(message["sender"]["id"]) or {}
 
+        self.send({"text": f"replied: hello"}, "RESPONSE")
+
         # User not found, better index him at first
         if user == {}:
             index_user.index(message)
