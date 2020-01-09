@@ -7,3 +7,5 @@ class State:
     CANCEL = "cancel"
     REGISTRAITON_CONFIRM = "registration_confirm"
     REGISTRATION_CANCEL = "registration_cancel"
+    CONFIRM_FOOD_ORDER = "confirm_food_order"
+    CANCEL_FOOD_ORDER = "cancel_food_order"

@@ -41,15 +41,23 @@ class Messenger(BaseMessenger):
             # # print(index_user.get(sender_id))
             # if user is None:
             #     return ""
-            
+
             # Try to grab the quick reply of user
-            if user.get("current_state") == State.SCHEDULE_ORDER and not user.get("current_state_completed", False):
+            if user.get("current_state") == State.SCHEDULE_ORDER and not user.get(
+                "current_state_completed", False
+            ):
                 try:
                     quick_reply = message["message"]["quick_reply"]["payload"]
-                    print(f"REPLY IS {quick_reply}")
+                    if quick_reply == State.CONFIRM_FOOD_ORDER:
+                        self.send({"text": "অর্ডারটি কনফার্ম করলাম, ধন্যবাদ ^_^"})
+                    else:
+                        self.send(
+                            {
+                                "text": "অর্ডারটি ক্যান্সেল করা হল :( , পুনরায় অর্ডার করতে চাইলে দয়া করে আবার Schedule Order থেকে শুরু করুন, ধন্যবাদ!"
+                            }
+                        )
                 except:
                     pass
-
 
             if (
                 user["current_state"] == State.LOGIN
@@ -134,7 +142,11 @@ class Messenger(BaseMessenger):
                 index_user.index(message)
 
         if "ORDER#" in message["postback"]["payload"]:
-            update_state.update(user.get("fb_id", None), current_state=State.SCHEDULE_ORDER, state_completion=False)
+            update_state.update(
+                user.get("fb_id", None),
+                current_state=State.SCHEDULE_ORDER,
+                state_completion=False,
+            )
 
             item_id = message["postback"]["payload"].split("ORDER#")[-1]
             # print(item_id)
