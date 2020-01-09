@@ -34,7 +34,8 @@ class Messenger(BaseMessenger):
     def message(self, message):
         sender_id = message["sender"]["id"]
 
-        pprint(f"INCOMING MESSAGE - isPAGE {sender_id == PAGE_ID}", message)
+        print(f"INCOMING MESSAGE - isPAGE {sender_id == PAGE_ID}")
+        pprint(message)
 
         if sender_id != PAGE_ID:
             print(message)
