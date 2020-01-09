@@ -81,12 +81,12 @@ class Messenger(BaseMessenger):
                             }
                         )
 
-                else:
-                    self.send(
-                        {
-                            "text": "আপনি লগডইন অবস্থায়ই আছেন, চাইলে আগামীকালের জন্য অর্ডার প্লেস করুন। ধন্যবাদ।"
-                        }
-                    )
+                # else:
+                #     self.send(
+                #         {
+                #             "text": "আপনি লগডইন অবস্থায়ই আছেন, চাইলে আগামীকালের জন্য অর্ডার প্লেস করুন। ধন্যবাদ।"
+                #         }
+                #     )
 
     def delivery(self, message):
         pass
