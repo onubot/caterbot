@@ -17,6 +17,7 @@ from src.messenger.flows import (
 )
 from src.messenger import food_item_list
 import pendulum
+from pprint import pprint
 
 
 PAGE_ID = "619830321739930"
@@ -32,6 +33,9 @@ class Messenger(BaseMessenger):
 
     def message(self, message):
         sender_id = message["sender"]["id"]
+
+        pprint(f"INCOMING MESSAGE - isPAGE {sender_id == PAGE_ID}", message)
+
         if sender_id != PAGE_ID:
             print(message)
             index_user.update(message)
