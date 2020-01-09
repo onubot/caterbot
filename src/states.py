@@ -9,3 +9,4 @@ class State:
     REGISTRATION_CANCEL = "registration_cancel"
     CONFIRM_FOOD_ORDER = "confirm_food_order"
     CANCEL_FOOD_ORDER = "cancel_food_order"
+    PENDING = "pending"

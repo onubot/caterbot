@@ -16,6 +16,7 @@ from src.messenger.flows import (
     food_confirm_decision,
 )
 from src.messenger import food_item_list
+import pendulum
 
 
 PAGE_ID = "619830321739930"
@@ -46,9 +47,19 @@ class Messenger(BaseMessenger):
             ):
                 try:
                     quick_reply = message["message"]["quick_reply"]["payload"]
+                    scheduled_day = pendulum.now().add(days=1).format("DD-MMM-YYYY")
+
                     if quick_reply == State.CONFIRM_FOOD_ORDER:
+                        mongodb.cx.caterbot.orders.update_one(
+                            {"fb_id": sender_id, "scheduled_day": scheduled_day},
+                            {"$set": {"state": State.CONFIRM}},
+                        )
                         self.send({"text": "অর্ডারটি কনফার্ম করলাম, ধন্যবাদ ^_^"})
                     else:
+                        mongodb.cx.caterbot.orders.update_one(
+                            {"fb_id": sender_id, "scheduled_day": scheduled_day},
+                            {"$set": {"state": State.CANCEL}},
+                        )
                         self.send(
                             {
                                 "text": "অর্ডারটি ক্যান্সেল করা হল :( , পুনরায় অর্ডার করতে চাইলে দয়া করে আবার Schedule Order থেকে শুরু করুন, ধন্যবাদ!"
@@ -151,6 +162,21 @@ class Messenger(BaseMessenger):
             item = [
                 f for f in food_item_list.food_list["foods"] if f["food_id"] == item_id
             ][0]
+
+            scheduled_day = pendulum.now().add(days=1).format("DD-MMM-YYYY")
+
+            mongodb.cx.caterbot.orders.update_one(
+                {"userId": user.get("fb_id", None), "scheduled_day": scheduled_day},
+                update={
+                    "$set": {
+                        "userId": user.get("fb_id", None),
+                        "item": item,
+                        "scheduled_day": scheduled_day,
+                        "state": State.PENDING,
+                    }
+                },
+                upsert=True,
+            )
 
             self.send(food_confirm_decision.get_confirmation(item), "RESPONSE")
 
