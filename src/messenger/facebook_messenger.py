@@ -52,15 +52,14 @@ class Messenger(BaseMessenger):
                     scheduled_day = pendulum.now().add(days=1).format("DD-MMM-YYYY")
 
                     if quick_reply == State.CONFIRM_FOOD_ORDER:
-                        mongodb.cx.caterbot.orders.update_one(
-                            {"fb_id": sender_id, "scheduled_day": scheduled_day},
+                        r = mongodb.cx.caterbot.orders.update_one(
+                            {"userId": sender_id, "scheduled_day": scheduled_day},
                             {"$set": {"state": State.CONFIRM}},
                         )
-
                         self.send({"text": "অর্ডারটি কনফার্ম করলাম, ধন্যবাদ ^_^"})
                     else:
                         mongodb.cx.caterbot.orders.update_one(
-                            {"fb_id": sender_id, "scheduled_day": scheduled_day},
+                            {"userId": sender_id, "scheduled_day": scheduled_day},
                             {"$set": {"state": State.CANCEL}},
                         )
                         self.send(
@@ -68,6 +67,8 @@ class Messenger(BaseMessenger):
                                 "text": "অর্ডারটি ক্যান্সেল করা হল :( , পুনরায় অর্ডার করতে চাইলে দয়া করে আবার Schedule Order থেকে শুরু করুন, ধন্যবাদ!"
                             }
                         )
+
+
                         update_state.update(
                             sender_id,
                             current_state=State.SCHEDULE_ORDER,
