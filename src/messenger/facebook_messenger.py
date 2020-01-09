@@ -8,7 +8,13 @@ from pprint import pprint
 from src.db import mongodb
 from src.states import State
 import datetime
-from src.messenger.flows import register, index_user, login, update_state
+from src.messenger.flows import (
+    register,
+    index_user,
+    login,
+    update_state,
+    food_confirm_decision,
+)
 from src.messenger import food_item_list
 
 
@@ -24,24 +30,31 @@ class Messenger(BaseMessenger):
         )
 
     def message(self, message):
+        print(message)
+
         sender_id = message["sender"]["id"]
 
         if sender_id != PAGE_ID:
             index_user.update(message)
             user = index_user.get(sender_id)
 
-            print(index_user.get(sender_id))
+            # print(index_user.get(sender_id))
+            if user is None:
+                return ""
 
             if (
                 user["current_state"] == State.LOGIN
                 and user["current_state_completed"] == False
             ):
                 credentials = message["message"]["text"].split(" ")
+
                 if len(credentials) != 2:
                     self.send(
                         {"text": "দয়া করে আবার সঠিকভাবে ইউজারনেম ও পাসওয়ার্ড দিন"},
                         "RESPONSE",
                     )
+
+                return None
 
                 username, password = credentials
 
@@ -72,8 +85,6 @@ class Messenger(BaseMessenger):
                     }
                 )
 
-            print(message)
-
     def delivery(self, message):
         pass
 
@@ -86,14 +97,18 @@ class Messenger(BaseMessenger):
     def postback(self, message):
         print("postback", message)
 
-        if message["postback"]["payload"] == State.SCHEDULE_ORDER:
-            self.send(
-                templates.GenericTemplate(
-                    elements=food_item_list.food_elements,
-                ).to_dict(),
-                "RESPONSE",
-            )
+        user = index_user.get(message["sender"]["id"])
 
+        if message["postback"]["payload"] == State.SCHEDULE_ORDER:
+            if not user["logged_in"]:
+                self.send({"text": "অর্ডার করার জন্য দয়া করে লগিন করুন। ধন্যবাদ"})
+            else:
+                self.send(
+                    templates.GenericTemplate(
+                        elements=food_item_list.food_elements,
+                    ).to_dict(),
+                    "RESPONSE",
+                )
 
         if message["postback"]["payload"] == State.REGISTER:
             pass
@@ -102,9 +117,17 @@ class Messenger(BaseMessenger):
             if message["sender"]["id"] != PAGE_ID:
                 index_user.index(message)
 
+        if "ORDER#" in message["postback"]["payload"]:
+            item_id = message["postback"]["payload"].split("ORDER#")[-1]
+            # print(item_id)
+            item = [
+                f for f in food_item_list.food_list["foods"] if f["food_id"] == item_id
+            ][0]
+
+            self.send(food_confirm_decision.get_confirmation(item), "RESPONSE")
+
         if message["postback"]["payload"] == State.LOGIN:
             if message["sender"]["id"] != PAGE_ID:
-                user = index_user.get(message["sender"]["id"])
 
                 if user["logged_in"]:
                     self.send(
@@ -127,4 +150,5 @@ class Messenger(BaseMessenger):
                     )
 
     def optin(self, message):
+        # print(message)
         pass

@@ -1,0 +1,15 @@
+name: Remote SSH Deployment
+on: [push]
+jobs:
+  build:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Executing remote ssh command via HOST IP, HOST USERNAME and SSH PRIVATE KEY
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
+            git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/onubot/caterbot.git
