@@ -16,6 +16,6 @@ jobs:
             cd caterbot
             git reset hard --HEAD
             git pull origin master
-            source /home/ubuntu/caterbot/venv activate
-            pip install -r requirements /home/ubuntu/caterbot/requirements.txt
-            
+            source /home/ubuntu/caterbot/venv/bin/activate
+            /home/ubuntu/caterbot/venv/bin/pip install -r requirements /home/ubuntu/caterbot/requirements.txt
+
