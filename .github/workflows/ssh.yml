@@ -12,6 +12,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
           script: |
+            killall gunicorn
             git clone https://${{ secrets.GITHUB_TOKEN }}@github.com/onubot/caterbot.git
             cd caterbot
             git reset --hard HEAD
@@ -19,4 +20,3 @@ jobs:
             source /home/ubuntu/caterbot/venv/bin/activate
             /home/ubuntu/caterbot/venv/bin/pip install -r /home/ubuntu/caterbot/requirements.txt
             /bin/bash /home/ubuntu/caterbot/deploy.sh
-
