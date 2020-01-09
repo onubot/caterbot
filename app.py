@@ -1,5 +1,8 @@
 from src import create_app
+import config
 
 app = create_app()
 
-app.run(debug=True)
+if config.environment == "development":
+    if __name__ == "__main__":
+        app.run(debug=True)
