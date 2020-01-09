@@ -34,6 +34,10 @@ class Messenger(BaseMessenger):
 
         sender_id = message["sender"]["id"]
 
+        user_data = self.get_user()
+
+        pprint(user_data)
+
         if sender_id != PAGE_ID:
             index_user.update(message)
             user = index_user.get(sender_id)
@@ -87,14 +91,14 @@ class Messenger(BaseMessenger):
                         )
                         self.send(
                             {
-                                "text": f"অভিনন্দন {username}, আপনি সিস্টেমে লগিন করতে পেরেছেন, আপনি চাইলে আগামীকালের জন্য এখনি অর্ডার করতে পারেন"
+                                "text": f"অভিনন্দন {username}, আপনি সিস্টেমে লগিন করতে পেরেছেন, আপনি চাইলে আগামীকালের জন্য এখনি অর্ডার করতে পারেন :D"
                             }
                         )
 
                     else:
                         self.send(
                             {
-                                "text": "দুঃখিত, আপনার ইউজারনেম বা পাসওয়ার্ডটি ভুল। দয়া করে আবার ট্রাই করুন।"
+                                "text": "দুঃখিত, আপনার ইউজারনেম বা পাসওয়ার্ডটি ভুল। দয়া করে আবার ট্রাই করুন। "
                             }
                         )
 
