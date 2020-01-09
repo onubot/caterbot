@@ -18,7 +18,7 @@ def index(message):
         mongodb.cx.caterbot.user.insert_one(
             {
                 "fb_id": message["sender"]["id"],
-                "registered": False,
+                "registered": True,
                 "last_state": None,
                 "current_state": State.HI,
                 "last_state_completed": False,

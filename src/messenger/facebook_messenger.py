@@ -38,9 +38,9 @@ class Messenger(BaseMessenger):
             index_user.update(message)
             user = index_user.get(sender_id)
 
-            # print(index_user.get(sender_id))
-            if user is None:
-                return ""
+            # # print(index_user.get(sender_id))
+            # if user is None:
+            #     return ""
 
             if (
                 user["current_state"] == State.LOGIN
