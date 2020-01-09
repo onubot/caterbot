@@ -99,6 +99,10 @@ class Messenger(BaseMessenger):
 
         user = index_user.get(message["sender"]["id"]) or {}
 
+        # User not found, better index him at first
+        if user == {}:
+            index_user.index(message)
+
         if message["postback"]["payload"] == State.SCHEDULE_ORDER:
             if not user.get("logged_in", False):
                 self.send({"text": "অর্ডার করার জন্য দয়া করে লগিন করুন। ধন্যবাদ"})
