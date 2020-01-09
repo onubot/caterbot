@@ -46,6 +46,8 @@ class Messenger(BaseMessenger):
                 user["current_state"] == State.LOGIN
                 and user["current_state_completed"] == False
             ):
+                print("FETCHING CREDENTIALS")
+
                 credentials = message["message"]["text"].split(" ")
 
                 if len(credentials) != 2:
@@ -54,36 +56,37 @@ class Messenger(BaseMessenger):
                         "RESPONSE",
                     )
 
-                return None
+                # return None
+                else:
 
-                username, password = credentials
+                    username, password = credentials
 
-                if username == user["username"] and password == user["password"]:
-                    update_state.update(
-                        sender_id,
-                        current_state=State.LOGIN,
-                        state_completion=True,
-                        logged_in=True,
-                    )
-                    self.send(
-                        {
-                            "text": f"অভিনন্দন {username}, আপনি সিস্টেমে লগিন করতে পেরেছেন, আপনি চাইলে আগামীকালের জন্য এখনি অর্ডার করতে পারেন"
-                        }
-                    )
+                    if username == user["username"] and password == user["password"]:
+                        update_state.update(
+                            sender_id,
+                            current_state=State.LOGIN,
+                            state_completion=True,
+                            logged_in=True,
+                        )
+                        self.send(
+                            {
+                                "text": f"অভিনন্দন {username}, আপনি সিস্টেমে লগিন করতে পেরেছেন, আপনি চাইলে আগামীকালের জন্য এখনি অর্ডার করতে পারেন"
+                            }
+                        )
+
+                    else:
+                        self.send(
+                            {
+                                "text": "দুঃখিত, আপনার ইউজারনেম বা পাসওয়ার্ডটি ভুল। দয়া করে আবার ট্রাই করুন।"
+                            }
+                        )
 
                 else:
                     self.send(
                         {
-                            "text": "দুঃখিত, আপনার ইউজারনেম বা পাসওয়ার্ডটি ভুল। দয়া করে আবার ট্রাই করুন।"
+                            "text": "আপনি লগডইন অবস্থায়ই আছেন, চাইলে আগামীকালের জন্য অর্ডার প্লেস করুন। ধন্যবাদ।"
                         }
                     )
-
-            else:
-                self.send(
-                    {
-                        "text": "আপনি লগডইন অবস্থায়ই আছেন, চাইলে আগামীকালের জন্য অর্ডার প্লেস করুন। ধন্যবাদ।"
-                    }
-                )
 
     def delivery(self, message):
         pass
