@@ -18,4 +18,5 @@ jobs:
             git pull origin master
             source /home/ubuntu/caterbot/venv/bin/activate
             /home/ubuntu/caterbot/venv/bin/pip install -r /home/ubuntu/caterbot/requirements.txt
+            /bin/bash /home/ubuntu/caterbot/deploy.sh
 
