@@ -100,7 +100,7 @@ class Messenger(BaseMessenger):
         user = index_user.get(message["sender"]["id"])
 
         if message["postback"]["payload"] == State.SCHEDULE_ORDER:
-            if not user["logged_in"]:
+            if not user.get("logged_in", False):
                 self.send({"text": "অর্ডার করার জন্য দয়া করে লগিন করুন। ধন্যবাদ"})
             else:
                 self.send(
@@ -129,7 +129,7 @@ class Messenger(BaseMessenger):
         if message["postback"]["payload"] == State.LOGIN:
             if message["sender"]["id"] != PAGE_ID:
 
-                if user["logged_in"]:
+                if user.get("logged_in", False):
                     self.send(
                         {
                             "text": "আপনি লগড-ইন অবস্থায়ই আছেন, চাইলে আগামীকালের জন্য অর্ডার প্লেস করুন। ধন্যবাদ।"
