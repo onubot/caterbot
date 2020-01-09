@@ -97,7 +97,7 @@ class Messenger(BaseMessenger):
     def postback(self, message):
         print("postback", message)
 
-        user = index_user.get(message["sender"]["id"])
+        user = index_user.get(message["sender"]["id"]) or {}
 
         if message["postback"]["payload"] == State.SCHEDULE_ORDER:
             if not user.get("logged_in", False):
